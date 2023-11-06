@@ -60,7 +60,7 @@
   },
   "license": "MIT",
   "peerDependencies": {
-    "angular": "^1.5.0",
-    "pdfjs-dist": "^4.0.0"
+    "angular": "^1.8.3",
+    "pdfjs-dist": "^4.0.189"
   }
 }
