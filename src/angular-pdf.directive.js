@@ -60,7 +60,6 @@ export const NgPdf = ($window, $document, $log) => {
         });
       });
 
-      PDFJS.disableWorker = true;
       scope.pageNum = pageToDisplay;
 
       scope.renderPage = num => {
@@ -172,7 +171,7 @@ export const NgPdf = ($window, $document, $log) => {
         }
 
         if (url && url.length) {
-          pdfLoaderTask = PDFJS.getDocument(params);
+          pdfLoaderTask = pdfjsLib.getDocument(url);
           pdfLoaderTask.onProgress = scope.onProgress;
           pdfLoaderTask.onPassword = scope.onPassword;
           pdfLoaderTask.then(
