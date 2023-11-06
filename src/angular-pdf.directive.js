@@ -22,7 +22,7 @@ export const NgPdf = ($window, $document, $log) => {
     canvas.getContext('2d').setTransform(ratio, 0, 0, ratio, 0, 0);
     return canvas;
   };
-  
+
   const initCanvas = (element, canvas) => {
     angular.element(canvas).addClass('rotate0');
     element.append(canvas);
@@ -63,17 +63,13 @@ export const NgPdf = ($window, $document, $log) => {
       scope.pageNum = pageToDisplay;
 
       scope.renderPage = num => {
-        if (renderTask) {
-          renderTask._internalRenderTask.cancel();
-        }
-
         pdfDoc.getPage(num).then(page => {
           let viewport;
           let pageWidthScale;
           let renderContext;
 
           if (pageFit) {
-            viewport = page.getViewport(1);
+            viewport = page.getViewport({ scale: 1 });
             const clientRect = element[0].getBoundingClientRect();
             pageWidthScale = clientRect.width / viewport.width;
             if (limitHeight) {
@@ -81,7 +77,8 @@ export const NgPdf = ($window, $document, $log) => {
             }
             scale = pageWidthScale;
           }
-          viewport = page.getViewport(scale);
+
+          viewport = page.getViewport({ scale: scale });
 
           setCanvasDimensions(canvas, viewport.width, viewport.height);
 
@@ -171,10 +168,10 @@ export const NgPdf = ($window, $document, $log) => {
         }
 
         if (url && url.length) {
-          pdfLoaderTask = pdfjsLib.getDocument(url);
+          pdfLoaderTask = pdfjsLib.getDocument(url)
           pdfLoaderTask.onProgress = scope.onProgress;
           pdfLoaderTask.onPassword = scope.onPassword;
-          pdfLoaderTask.then(
+          pdfLoaderTask.promise.then(
             _pdfDoc => {
               if (angular.isFunction(scope.onLoad)) {
                 scope.onLoad();
